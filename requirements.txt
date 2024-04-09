@@ -11,3 +11,4 @@ Werkzeug==3.0.1
 joblib==1.2.0
 scikit-learn==1.2.2
 pandas
+gunicorn==20.0.4
