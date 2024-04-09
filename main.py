@@ -3,17 +3,21 @@ from flask_restful import Api, Resource, reqparse
 import os
 
 app = Flask(__name__)
-api = Api(app)
+# api = Api(app)
 
 
-class WelcomeRailway(Resource):
-    def get(self):
+# class WelcomeRailway(Resource):
+#     def get(self):
 
-        response = "Hello from ml-server!"
+#         response = "Hello from ml-server!"
 
-        return jsonify({"message": response}), 200
+#         return jsonify({"message": response}), 200
     
-api.add_resource(WelcomeRailway, "/")
+# api.add_resource(WelcomeRailway, "/")
+
+@app.route('/')
+def index():
+    return jsonify({"Choo Choo": "Welcome to your Flask app 🚅"})
 
 if __name__ == '__main__':
     app.run(debug=True, port=os.getenv("PORT", default=5000))
