@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, make_response
 from flask_restful import Api, Resource, reqparse
 import os
 from classifier import classify_all, predict_input, predict_output, predict_topic, predict_difficulty, extract_keywords
@@ -12,9 +12,9 @@ api = Api(app)
 class WelcomeRailway(Resource):
     def get(self):
 
-        response = {"message": "Hello from ml-server!"}
+        response =  "Hello from ml-server!"
 
-        return jsonify({"message": response}), 200
+        return  response, 200
  
 class Classification(Resource):
     def post(self):
