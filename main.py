@@ -3,7 +3,7 @@ from flask_restful import Api, Resource, reqparse
 import os
 from classifier import classify_all, predict_input, predict_output, predict_topic, predict_difficulty, extract_keywords
 from similarity  import find_similar_problems
-
+from goanaguru import ask_goana_guru
 
 app = Flask(__name__)
 api = Api(app)
@@ -12,7 +12,7 @@ api = Api(app)
 class WelcomeRailway(Resource):
     def get(self):
 
-        response = "Hello from ml-server!"
+        response = {"message": "Hello from ml-server!"}
 
         return jsonify({"message": response}), 200
  
@@ -100,7 +100,7 @@ class FindSimilarProblems(Resource):
 
         # Find similar problems
         similar_problem_ids = find_similar_problems(user_input)
-
+        
         return {"similar_problem_ids": similar_problem_ids}, 200
 
 class GoanaGuru(Resource):
