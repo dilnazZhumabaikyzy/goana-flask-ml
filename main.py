@@ -103,6 +103,19 @@ class FindSimilarProblems(Resource):
 
         return {"similar_problem_ids": similar_problem_ids}, 200
 
+class GoanaGuru(Resource):
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("input", type=str, required=True, help="Input text is required")
+        args = parser.parse_args()
+        
+        user_input = args["input"]
+
+        predictions = ask_goana_guru(user_input)
+
+        return predictions, 200
+
+
 
 api.add_resource(FindSimilarProblems, "/find_similar_problems")
 api.add_resource(ClassifyInput, "/classify/input")
@@ -112,7 +125,7 @@ api.add_resource(ClassifyDifficulty, "/classify/difficulty")
 api.add_resource(ExtractKeywords, "/classify/keywords")
 api.add_resource(Classification, "/classify")   
 api.add_resource(WelcomeRailway, "/")
-
+api.add_resource(GoanaGuru, "/goanaguru")
 
 if __name__ == '__main__':
     app.run(debug=True, port=os.getenv("PORT", default=5000))
