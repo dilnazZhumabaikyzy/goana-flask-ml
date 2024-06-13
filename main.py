@@ -1,10 +1,10 @@
 from flask import Flask, jsonify, make_response
 from flask_restful import Api, Resource, reqparse
 import os
-from classifier import classify_all, predict_input, predict_output, predict_topic, predict_difficulty, extract_keywords
+from classifier import predict_five_features, classify_all, predict_input, predict_output, predict_topic, predict_difficulty, extract_keywords
 from similarity  import find_similar_problems
 from goanaguru import ask_goana_guru
-
+from implementation import get_java_implementation
 app = Flask(__name__)
 api = Api(app)
 
@@ -98,10 +98,9 @@ class FindSimilarProblems(Resource):
         
         user_input = args["input"]
 
-        # Find similar problems
-        similar_problem_ids = find_similar_problems(user_input)
-        
-        return {"similar_problem_ids": similar_problem_ids}, 200
+        response = find_similar_problems(user_input)
+
+        return response, 200
 
 class GoanaGuru(Resource):
     def post(self):
@@ -117,6 +116,31 @@ class GoanaGuru(Resource):
 
 
 
+class GetJavaImpl(Resource):
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("input", type=str, required=True, help="Input text is required")
+        args = parser.parse_args()
+        
+        user_input = args["input"]
+
+        predictions = get_java_implementation(user_input)
+
+        return predictions, 200
+
+class ClassifyFiveFeatures(Resource):
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("input", type=str, required=True, help="Input text is required")
+        args = parser.parse_args()
+        
+        user_input = args["input"]
+
+        predictions = predict_five_features(user_input)
+        print(predictions)
+        return {"binary": predictions}, 200
+
+
 api.add_resource(FindSimilarProblems, "/find_similar_problems")
 api.add_resource(ClassifyInput, "/classify/input")
 api.add_resource(ClassifyOutput, "/classify/output")
@@ -126,6 +150,8 @@ api.add_resource(ExtractKeywords, "/classify/keywords")
 api.add_resource(Classification, "/classify")   
 api.add_resource(WelcomeRailway, "/")
 api.add_resource(GoanaGuru, "/goanaguru")
+api.add_resource(GetJavaImpl, "/java")
+api.add_resource(ClassifyFiveFeatures, "/mapreduce")
 
 if __name__ == '__main__':
     app.run(debug=True, port=os.getenv("PORT", default=5000))

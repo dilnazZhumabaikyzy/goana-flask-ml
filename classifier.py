@@ -13,6 +13,24 @@ tfidf_vectorizer = joblib.load(directory + "tfidf_vectorizer_beta.joblib")
 tfidf_vectorizer_sigma = joblib.load(directory + "sigma_vectorizer.pkl")
 
 
+model_1 = joblib.load("1.joblib")
+model_2 = joblib.load("2.joblib")
+model_3 = joblib.load("3.joblib")
+model_4 = joblib.load("4.joblib")
+model_5 = joblib.load("5.joblib")
+
+def predict_five_features(user_input):
+    user_input_vectorized = tfidf_vectorizer.transform([user_input])
+    
+    prediction_1 = int(model_1.predict(user_input_vectorized)[0])
+    prediction_2 = int(model_2.predict(user_input_vectorized)[0])
+    prediction_3 = int(model_3.predict(user_input_vectorized)[0])
+    prediction_4 = int(model_4.predict(user_input_vectorized)[0])
+    prediction_5 = int(model_5.predict(user_input_vectorized)[0])
+
+    return [prediction_1, prediction_2, prediction_3, prediction_4, prediction_5]
+
+
 def predict_input(user_input):
     user_input_vectorized = tfidf_vectorizer.transform([user_input])
     prediction = model_input.predict(user_input_vectorized)[0]
